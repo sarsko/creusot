@@ -1,0 +1,150 @@
+module Type
+  use Ref
+  use mach.int.Int
+  use mach.int.Int32
+  use mach.int.Int64
+  use mach.int.UInt32
+  use mach.int.UInt64
+  use string.Char
+  use floating_point.Single
+  use floating_point.Double
+  use prelude.Prelude
+  type core_option_option 't = 
+    | Core_Option_Option_None
+    | Core_Option_Option_Some('t)
+    
+  type iterator_list 't = 
+    | Iterator_List_Cons('t, iterator_list 't)
+    | Iterator_List_Nil
+    
+end
+module Iterator_Impl0_Snoc_Interface
+  type t   
+  use Type
+  function snoc (self : Type.iterator_list t) (v : t) : Type.iterator_list t
+end
+module Iterator_Impl0_Snoc
+  type t   
+  use Type
+  function snoc (self : Type.iterator_list t) (v : t) : Type.iterator_list t = 
+    Type.Iterator_List_Nil
+end
+module Core_Marker_Sized
+  type self   
+end
+module Iterator_Iterator
+  type self   
+  clone Core_Marker_Sized as Sized0 with type self = self
+  type item   
+  use Type
+  function visited (self : self) : Type.iterator_list item
+  function completed (self : self) : bool
+  use prelude.Prelude
+  clone Iterator_Impl0_Snoc as Snoc1 with type t = item
+  val next (self : borrowed self) : Type.core_option_option item
+    requires {not completed ( * self)}
+    ensures { match (result) with
+      | Type.Core_Option_Option_None -> completed ( ^ self)
+      | Type.Core_Option_Option_Some(v) -> visited ( ^ self) = Snoc1.snoc (visited ( * self)) v && not completed ( ^ self)
+      end }
+    
+end
+module CreusotContracts_Builtins_Resolve
+  type self   
+  predicate resolve (self : self)
+end
+module Iterator_Sum_Interface
+  type i   
+  clone Iterator_Iterator as Iterator0 with type self = i
+  val sum (it : i) : ()
+    requires {not Iterator0.completed it}
+    ensures { Iterator0.completed it }
+    
+end
+module Iterator_Sum
+  type i   
+  use mach.int.Int
+  use mach.int.UInt32
+  use Type
+  use prelude.Prelude
+  clone CreusotContracts_Builtins_Resolve as Resolve6 with type self = ()
+  clone CreusotContracts_Builtins_Resolve as Resolve5 with type self = i
+  clone CreusotContracts_Builtins_Resolve as Resolve4 with type self = isize
+  clone CreusotContracts_Builtins_Resolve as Resolve3 with type self = Type.core_option_option uint32
+  clone CreusotContracts_Builtins_Resolve as Resolve2 with type self = uint32
+  clone Core_Marker_Sized as Sized1 with type self = i
+  clone Iterator_Iterator as Iterator0 with type self = i, type item = uint32
+  let rec cfg sum (it : i) : ()
+    requires {not Iterator0.completed it}
+    ensures { Iterator0.completed it }
+    
+   = 
+  var _0 : ();
+  var it_1 : i;
+  var x_2 : uint32;
+  var _4 : ();
+  var _5 : Type.core_option_option uint32;
+  var _6 : borrowed i;
+  var _7 : isize;
+  var e_8 : uint32;
+  var _9 : uint32;
+  var _10 : ();
+  var _11 : ();
+  var _12 : ();
+  {
+    it_1 <- it;
+    goto BB0
+  }
+  BB0 {
+    x_2 <- (0 : uint32);
+    goto BB1
+  }
+  BB1 {
+    goto BB2
+  }
+  BB2 {
+    goto BB3
+  }
+  BB3 {
+    invariant dummy { not Iterator0.completed it_1 };
+    _6 <- borrow_mut it_1;
+    it_1 <-  ^ _6;
+    _5 <- Iterator0.next _6;
+    goto BB4
+  }
+  BB4 {
+    switch (_5)
+      | Type.Core_Option_Option_Some(_) -> goto BB6
+      | _ -> goto BB5
+      end
+  }
+  BB5 {
+    assume { Resolve2.resolve x_2 };
+    assume { Resolve3.resolve _5 };
+    assume { Resolve4.resolve _7 };
+    _0 <- ();
+    goto BB8
+  }
+  BB6 {
+    assume { Resolve4.resolve _7 };
+    goto BB7
+  }
+  BB7 {
+    assume { Resolve2.resolve e_8 };
+    e_8 <- (let Type.Core_Option_Option_Some(a) = _5 in a);
+    assume { Resolve3.resolve _5 };
+    assume { Resolve2.resolve _9 };
+    _9 <- e_8;
+    assume { Resolve2.resolve e_8 };
+    x_2 <- x_2 + _9;
+    assume { Resolve2.resolve _9 };
+    _4 <- ();
+    assume { Resolve6.resolve _4 };
+    goto BB2
+  }
+  BB8 {
+    assume { Resolve5.resolve it_1 };
+    return _0
+  }
+  
+end
