@@ -560,13 +560,13 @@ module C02Gnome_GnomeSort
   }
   BB13 {
     assume { Resolve3.resolve _15 };
-    _29 <- borrow_mut ( * v_1);
-    v_1 <- { v_1 with current = ( ^ _29) };
     assume { Resolve2.resolve _31 };
     _31 <- i_5;
     _30 <- _31 - (1 : usize);
     assume { Resolve2.resolve _32 };
     _32 <- i_5;
+    _29 <- borrow_mut ( * v_1);
+    v_1 <- { v_1 with current = ( ^ _29) };
     _28 <- Swap0.swap _29 _30 _32;
     goto BB14
   }

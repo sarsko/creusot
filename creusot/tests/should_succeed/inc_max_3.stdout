@@ -130,14 +130,14 @@ module IncMax3_IncMax3
     assume { Resolve1.resolve _5 };
     _10 <- borrow_mut ma_1;
     ma_1 <-  ^ _10;
-    _9 <- borrow_mut ( * _10);
-    _10 <- { _10 with current = ( ^ _9) };
     assume { Resolve2.resolve _10 };
     _12 <- borrow_mut mb_2;
     mb_2 <-  ^ _12;
+    assume { Resolve2.resolve _12 };
+    _9 <- borrow_mut ( * _10);
+    _10 <- { _10 with current = ( ^ _9) };
     _11 <- borrow_mut ( * _12);
     _12 <- { _12 with current = ( ^ _11) };
-    assume { Resolve2.resolve _12 };
     _8 <- Swap0.swap _9 _11;
     goto BB2
   }
@@ -170,15 +170,15 @@ module IncMax3_IncMax3
     assume { Resolve1.resolve _14 };
     _19 <- borrow_mut mb_2;
     mb_2 <-  ^ _19;
-    _18 <- borrow_mut ( * _19);
-    _19 <- { _19 with current = ( ^ _18) };
     assume { Resolve2.resolve _19 };
     _21 <- borrow_mut mc_3;
     mc_3 <-  ^ _21;
     assume { Resolve4.resolve mc_3 };
+    assume { Resolve2.resolve _21 };
+    _18 <- borrow_mut ( * _19);
+    _19 <- { _19 with current = ( ^ _18) };
     _20 <- borrow_mut ( * _21);
     _21 <- { _21 with current = ( ^ _20) };
-    assume { Resolve2.resolve _21 };
     _17 <- Swap0.swap _18 _20;
     goto BB6
   }
@@ -212,14 +212,14 @@ module IncMax3_IncMax3
     assume { Resolve1.resolve _23 };
     _28 <- borrow_mut ma_1;
     ma_1 <-  ^ _28;
-    _27 <- borrow_mut ( * _28);
-    _28 <- { _28 with current = ( ^ _27) };
     assume { Resolve2.resolve _28 };
     _30 <- borrow_mut mb_2;
     mb_2 <-  ^ _30;
+    assume { Resolve2.resolve _30 };
+    _27 <- borrow_mut ( * _28);
+    _28 <- { _28 with current = ( ^ _27) };
     _29 <- borrow_mut ( * _30);
     _30 <- { _30 with current = ( ^ _29) };
-    assume { Resolve2.resolve _30 };
     _26 <- Swap0.swap _27 _29;
     goto BB10
   }
@@ -313,19 +313,19 @@ module IncMax3_TestIncMax3
   BB0 {
     _6 <- borrow_mut a_1;
     a_1 <-  ^ _6;
-    _5 <- borrow_mut ( * _6);
-    _6 <- { _6 with current = ( ^ _5) };
     assume { Resolve0.resolve _6 };
     _8 <- borrow_mut b_2;
     b_2 <-  ^ _8;
-    _7 <- borrow_mut ( * _8);
-    _8 <- { _8 with current = ( ^ _7) };
     assume { Resolve0.resolve _8 };
     _10 <- borrow_mut c_3;
     c_3 <-  ^ _10;
+    assume { Resolve0.resolve _10 };
+    _5 <- borrow_mut ( * _6);
+    _6 <- { _6 with current = ( ^ _5) };
+    _7 <- borrow_mut ( * _8);
+    _8 <- { _8 with current = ( ^ _7) };
     _9 <- borrow_mut ( * _10);
     _10 <- { _10 with current = ( ^ _9) };
-    assume { Resolve0.resolve _10 };
     _4 <- IncMax30.inc_max_3 _5 _7 _9;
     goto BB1
   }

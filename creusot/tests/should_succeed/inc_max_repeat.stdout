@@ -215,14 +215,14 @@ module IncMaxRepeat_IncMaxRepeat
     assume { Resolve1.resolve _10 };
     _15 <- borrow_mut a_1;
     a_1 <-  ^ _15;
-    _14 <- borrow_mut ( * _15);
-    _15 <- { _15 with current = ( ^ _14) };
     assume { Resolve2.resolve _15 };
     _17 <- borrow_mut b_2;
     b_2 <-  ^ _17;
+    assume { Resolve2.resolve _17 };
+    _14 <- borrow_mut ( * _15);
+    _15 <- { _15 with current = ( ^ _14) };
     _16 <- borrow_mut ( * _17);
     _17 <- { _17 with current = ( ^ _16) };
-    assume { Resolve2.resolve _17 };
     mc_13 <- TakeMax0.take_max _14 _16;
     goto BB4
   }

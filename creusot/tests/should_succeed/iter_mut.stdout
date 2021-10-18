@@ -414,9 +414,9 @@ module IterMut_IncVec
   }
   BB1 {
     assume { Resolve1.resolve old_v_2 };
+    assume { Resolve2.resolve v_1 };
     _6 <- borrow_mut ( * v_1);
     v_1 <- { v_1 with current = ( ^ _6) };
-    assume { Resolve2.resolve v_1 };
     it_5 <- IterMut0.iter_mut _6;
     goto BB2
   }

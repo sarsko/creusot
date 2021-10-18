@@ -10,9 +10,18 @@ use why3::mlcfg::{Pattern::*, Statement::*};
 
 use super::FunctionTranslator;
 use crate::ctx::translate_value_id;
+use rustc_middle::ty::List;
 
 impl<'body, 'sess, 'tcx> FunctionTranslator<'body, 'sess, 'tcx> {
     pub fn translate_rplace(&mut self, rhs: &Place<'tcx>) -> Exp {
+        if let Some(pl) = self.pending_activation.remove(&rhs.local) {
+            let borrow = BorrowMut(box self.translate_rplace(&pl));
+            let place = Place { local: rhs.local, projection: List::empty() };
+            self.emit_assignment(&place, borrow);
+            let reassign = Final(box self.translate_rplace(&place));
+            self.emit_assignment(&pl, reassign);
+        }
+
         self.translate_rplace_inner(rhs.local, rhs.projection)
     }
 

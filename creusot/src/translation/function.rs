@@ -21,7 +21,7 @@ use rustc_middle::ty::Ty;
 use rustc_middle::ty::{GenericParamDef, GenericParamDefKind};
 use rustc_span::Symbol;
 
-use indexmap::IndexMap;
+use indexmap::{IndexMap, IndexSet};
 
 mod place;
 mod statement;
@@ -82,6 +82,9 @@ pub struct FunctionTranslator<'body, 'sess, 'tcx> {
     clone_names: CloneMap<'tcx>,
 
     invariants: IndexMap<BasicBlock, Vec<(Symbol, Exp)>>,
+
+    // Two Phase borrows
+    pending_activation: IndexMap<Local, Place<'tcx>>,
 }
 
 impl<'body, 'sess, 'tcx> FunctionTranslator<'body, 'sess, 'tcx> {
@@ -117,6 +120,7 @@ impl<'body, 'sess, 'tcx> FunctionTranslator<'body, 'sess, 'tcx> {
             fresh_id: body.basic_blocks().len(),
             clone_names,
             invariants,
+            pending_activation: Default::default(),
         }
     }
 

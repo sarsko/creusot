@@ -401,10 +401,10 @@ module C01_AllZero
   }
   BB5 {
     assume { Resolve3.resolve _10 };
-    _15 <- borrow_mut ( * v_1);
-    v_1 <- { v_1 with current = ( ^ _15) };
     assume { Resolve2.resolve _16 };
     _16 <- i_2;
+    _15 <- borrow_mut ( * v_1);
+    v_1 <- { v_1 with current = ( ^ _15) };
     _14 <- IndexMut0.index_mut _15 _16;
     goto BB6
   }

@@ -118,9 +118,9 @@ module InvariantMoves_TestInvariantMove
   BB3 {
     _6 <- borrow_mut x_1;
     x_1 <-  ^ _6;
+    assume { Resolve0.resolve _6 };
     _5 <- borrow_mut ( * _6);
     _6 <- { _6 with current = ( ^ _5) };
-    assume { Resolve0.resolve _6 };
     _4 <- Pop0.pop _5;
     goto BB4
   }

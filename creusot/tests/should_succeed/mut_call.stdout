@@ -56,9 +56,9 @@ module MutCall_Test
     _4 <- borrow_mut a_1;
     a_1 <-  ^ _4;
     assume { (fun x -> true) a_1 };
+    assume { (fun x -> true) _4 };
     _3 <- borrow_mut ( * _4);
     _4 <- { _4 with current = ( ^ _3) };
-    assume { (fun x -> true) _4 };
     _2 <- Kill0.kill _3;
     goto BB1
   }

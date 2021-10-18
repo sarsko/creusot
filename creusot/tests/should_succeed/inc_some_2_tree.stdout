@@ -471,9 +471,9 @@ module IncSome2Tree_Impl1_TakeSomeRest
   BB15 {
     assume { Resolve6.resolve mtr_5 };
     assume { Resolve4.resolve _16 };
+    assume { Resolve6.resolve mtl_3 };
     _17 <- borrow_mut ( * mtl_3);
     mtl_3 <- { mtl_3 with current = ( ^ _17) };
-    assume { Resolve6.resolve mtl_3 };
     _0 <- take_some_rest _17;
     goto BB16
   }
@@ -483,9 +483,9 @@ module IncSome2Tree_Impl1_TakeSomeRest
   BB17 {
     assume { Resolve6.resolve mtl_3 };
     assume { Resolve4.resolve _16 };
+    assume { Resolve6.resolve mtr_5 };
     _18 <- borrow_mut ( * mtr_5);
     mtr_5 <- { mtr_5 with current = ( ^ _18) };
-    assume { Resolve6.resolve mtr_5 };
     _0 <- take_some_rest _18;
     goto BB18
   }
@@ -633,9 +633,9 @@ module IncSome2Tree_IncSome2Tree
     assume { Resolve1.resolve mt_7 };
     mt_7 <- (let (_, a) = _8 in a);
     assume { Resolve2.resolve _8 };
+    assume { Resolve1.resolve mt_7 };
     _12 <- borrow_mut ( * mt_7);
     mt_7 <- { mt_7 with current = ( ^ _12) };
-    assume { Resolve1.resolve mt_7 };
     _11 <- TakeSomeRest0.take_some_rest _12;
     goto BB3
   }

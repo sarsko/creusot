@@ -383,9 +383,9 @@ module IncSome2List_Impl1_TakeSomeRest
   BB8 {
     assume { Resolve5.resolve ma_3 };
     assume { Resolve4.resolve _7 };
+    assume { Resolve6.resolve ml_4 };
     _10 <- borrow_mut ( * ml_4);
     ml_4 <- { ml_4 with current = ( ^ _10) };
-    assume { Resolve6.resolve ml_4 };
     _0 <- take_some_rest _10;
     goto BB9
   }
@@ -530,9 +530,9 @@ module IncSome2List_IncSome2List
     assume { Resolve1.resolve ml_7 };
     ml_7 <- (let (_, a) = _8 in a);
     assume { Resolve2.resolve _8 };
+    assume { Resolve1.resolve ml_7 };
     _12 <- borrow_mut ( * ml_7);
     ml_7 <- { ml_7 with current = ( ^ _12) };
-    assume { Resolve1.resolve ml_7 };
     _11 <- TakeSomeRest0.take_some_rest _12;
     goto BB3
   }

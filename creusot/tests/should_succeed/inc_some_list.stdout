@@ -385,9 +385,9 @@ module IncSomeList_Impl1_TakeSome
   BB8 {
     assume { Resolve6.resolve ma_5 };
     assume { Resolve5.resolve _11 };
+    assume { Resolve4.resolve ml_6 };
     _14 <- borrow_mut ( * ml_6);
     ml_6 <- { ml_6 with current = ( ^ _14) };
-    assume { Resolve4.resolve ml_6 };
     _13 <- take_some _14;
     goto BB9
   }

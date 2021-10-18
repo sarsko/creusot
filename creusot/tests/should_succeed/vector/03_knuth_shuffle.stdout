@@ -442,8 +442,6 @@ module C03KnuthShuffle_KnuthShuffle
     goto BB7
   }
   BB7 {
-    _20 <- borrow_mut ( * v_1);
-    v_1 <- { v_1 with current = ( ^ _20) };
     assume { Resolve2.resolve _21 };
     _21 <- i_15;
     assume { Resolve2.resolve i_15 };
@@ -454,6 +452,8 @@ module C03KnuthShuffle_KnuthShuffle
     _25 <- n_5;
     _23 <- _24 - _25;
     _22 <- _23 - (1 : usize);
+    _20 <- borrow_mut ( * v_1);
+    v_1 <- { v_1 with current = ( ^ _20) };
     _19 <- Swap0.swap _20 _21 _22;
     goto BB8
   }

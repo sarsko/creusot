@@ -63,11 +63,17 @@ impl<'tcx> FunctionTranslator<'_, '_, 'tcx> {
             },
             Rvalue::Ref(_, ss, pl) => match ss {
                 Shared | Shallow | Unique => self.translate_rplace(pl),
-                Mut { .. } => {
-                    let borrow = BorrowMut(box self.translate_rplace(pl));
-                    self.emit_assignment(place, borrow);
-                    let reassign = Final(box self.translate_rplace(place));
-                    self.emit_assignment(pl, reassign);
+                Mut { allow_two_phase_borrow } => {
+                    if *allow_two_phase_borrow {
+                        if let Some(loc) = place.as_local() {
+                            self.pending_activation.insert(loc, *pl);
+                        }
+                    } else {
+                        let borrow = BorrowMut(box self.translate_rplace(pl));
+                        self.emit_assignment(place, borrow);
+                        let reassign = Final(box self.translate_rplace(place));
+                        self.emit_assignment(pl, reassign);
+                    }
                     return;
                 }
             },
