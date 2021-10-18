@@ -6,7 +6,7 @@ use rustc_middle::{
 };
 use rustc_mir_dataflow::{
     self,
-    impls::{MaybeInitializedLocals, MaybeLiveLocals},
+    impls::{MaybeInitializedLocals, MaybeLiveLocals, MaybeBorrowedLocals},
     Analysis, ResultsCursor,
 };
 
@@ -15,6 +15,7 @@ use crate::extended_location::ExtendedLocation;
 pub struct EagerResolver<'body, 'tcx> {
     local_live: ResultsCursor<'body, 'tcx, MaybeLiveLocals>,
 
+    maybe_borrowed: ResultsCursor<'body, 'tcx, MaybeBorrowedLocals>,
     // Whether a local is initialized or not at a location
     local_init: ResultsCursor<'body, 'tcx, MaybeInitializedLocals>,
 
@@ -36,12 +37,18 @@ impl<'body, 'tcx> EagerResolver<'body, 'tcx> {
             .iterate_to_fixpoint()
             .into_results_cursor(body);
 
+        let maybe_borrowed = MaybeBorrowedLocals::
+            all_borrows()
+            .into_engine(tcx, body)
+            .iterate_to_fixpoint()
+            .into_results_cursor(body);
+
         // This is called MaybeLiveLocals because pointers don't keep their referees alive.
         // TODO: Defensive check.
         let local_live =
             MaybeLiveLocals.into_engine(tcx, body).iterate_to_fixpoint().into_results_cursor(body);
         let never_live = crate::analysis::NeverLive::for_body(body);
-        EagerResolver { local_live, local_init, local_uninit, never_live }
+        EagerResolver { local_live, maybe_borrowed, local_init, local_uninit, never_live }
     }
 
     pub fn locals_resolved_between(
@@ -65,6 +72,12 @@ impl<'body, 'tcx> EagerResolver<'body, 'tcx> {
         end.seek_to(&mut self.local_init);
         let init_at_end = self.local_init.get().clone();
 
+        start.seek_to(&mut self.maybe_borrowed);
+        let borrowed_at_start = self.maybe_borrowed.get().clone();
+
+        end.seek_to(&mut self.maybe_borrowed);
+        let borrowed_at_end = self.maybe_borrowed.get().clone();
+
         start.seek_to(&mut self.local_uninit);
         let uninit_at_start = self.local_uninit.get().clone();
 
@@ -72,6 +85,10 @@ impl<'body, 'tcx> EagerResolver<'body, 'tcx> {
         let uninit_at_end = self.local_uninit.get().clone();
 
         trace!("location: {:?}-{:?}", start, end);
+
+        trace!("borrowed_at_start: {:?}", borrowed_at_start);
+        trace!("borrowed_at_end: {:?}", borrowed_at_end);
+
         trace!("live_at_start: {:?}", live_at_start);
         trace!("live_at_end: {:?}", live_at_end);
         trace!("init_at_start: {:?}", init_at_start);
