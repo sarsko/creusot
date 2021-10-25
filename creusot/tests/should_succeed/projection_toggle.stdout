@@ -10,6 +10,28 @@ module Type
   use floating_point.Double
   use prelude.Prelude
 end
+module Core_Marker_Sized
+  type self   
+end
+module Core_Cmp_PartialEq_Ne_Interface
+  type self   
+  type rhs   
+  use prelude.Prelude
+  val ne (self : self) (other : rhs) : bool
+end
+module Core_Cmp_PartialEq_Ne
+  type self   
+  type rhs   
+  use prelude.Prelude
+  val ne (self : self) (other : rhs) : bool
+end
+module Core_Cmp_PartialEq
+  type self   
+  type rhs   
+  use prelude.Prelude
+  val eq (self : self) (other : rhs) : bool
+  clone export Core_Cmp_PartialEq_Ne_Interface with type self = self, type rhs = rhs
+end
 module CreusotContracts_Builtins_Resolve_Resolve
   type self   
   predicate resolve (self : self)
@@ -37,37 +59,10 @@ module CreusotContracts_Builtins_Resolve_Impl1
   clone export CreusotContracts_Builtins_Resolve_Impl1_Resolve with type t = t
   clone export CreusotContracts_Builtins_Resolve_Resolve with type self = borrowed t, predicate resolve = resolve
 end
-module Core_Marker_Sized
-  type self   
-end
-module Core_Cmp_PartialEq_Ne_Interface
-  type self   
-  type rhs   
-  use prelude.Prelude
-  val ne (self : self) (other : rhs) : bool
-end
-module Core_Cmp_PartialEq_Ne
-  type self   
-  type rhs   
-  use prelude.Prelude
-  val ne (self : self) (other : rhs) : bool
-end
-module Core_Cmp_PartialEq
-  type self   
-  type rhs   
-  use prelude.Prelude
-  val eq (self : self) (other : rhs) : bool
-  clone export Core_Cmp_PartialEq_Ne_Interface with type self = self, type rhs = rhs
-end
 module ProjectionToggle_ProjToggle_Interface
   type t   
   use prelude.Prelude
   val proj_toggle (toggle : bool) (a : borrowed t) (b : borrowed t) : borrowed t
-    ensures { match (toggle) with
-      | True -> result = a &&  ^ b =  * b
-      | False -> result = b &&  ^ a =  * a
-      end }
-    
 end
 module ProjectionToggle_ProjToggle
   type t   
@@ -76,13 +71,7 @@ module ProjectionToggle_ProjToggle
   clone Core_Marker_Sized as Sized0 with type self = t
   clone CreusotContracts_Builtins_Resolve_Impl1 as Resolve1 with type t = t
   clone CreusotContracts_Builtins_Resolve_Resolve as Resolve0 with type self = bool
-  let rec cfg proj_toggle (toggle : bool) (a : borrowed t) (b : borrowed t) : borrowed t
-    ensures { match (toggle) with
-      | True -> result = a &&  ^ b =  * b
-      | False -> result = b &&  ^ a =  * a
-      end }
-    
-   = 
+  let rec cfg proj_toggle (toggle : bool) (a : borrowed t) (b : borrowed t) : borrowed t = 
   var _0 : borrowed t;
   var toggle_1 : bool;
   var a_2 : borrowed t;
@@ -188,6 +177,7 @@ module ProjectionToggle_Main
     _7 <- borrow_mut b_2;
     b_2 <-  ^ _7;
     assume { Resolve1.resolve b_2 };
+    assume { Resolve0.resolve _7 };
     _4 <- borrow_mut ( * _5);
     _5 <- { _5 with current = ( ^ _4) };
     _6 <- borrow_mut ( * _7);
@@ -196,7 +186,6 @@ module ProjectionToggle_Main
     goto BB1
   }
   BB1 {
-    assume { Resolve0.resolve _7 };
     x_3 <- { x_3 with current = ( * x_3 + (5 : int32)) };
     assume { Resolve0.resolve x_3 };
     assume { Resolve1.resolve _11 };
