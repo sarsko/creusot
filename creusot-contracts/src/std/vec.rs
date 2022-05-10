@@ -109,6 +109,23 @@ extern_spec! {
   fn std::vec::from_elem<T : Clone>(elem : T, n : usize) -> Vec<T>
 }
 
+extern_spec! {
+    #[ensures(match result {
+        Some(t) => (@self_) === (@^self_).push(t),
+        None => (@self_).len() === (@^self_).len() && (@self_).len() === 0
+    })]
+    fn std::vec::Vec::pop<T, A : Allocator>(self_ : &mut Vec<T, A>) -> Option<T>
+}
+//     #[trusted]
+//     #[ensures(match result {
+//         Some(t) => (@self) === (@^self).push(t),
+//         None => (@self).len() === (@^self).len() && (@self).len() === 0
+//     })]
+//     pub fn pop(&mut self) -> Option<T> {
+//         self.0.pop()
+//     }
+// }
+
 // impl<T> Vec<T> {
 //     #[trusted]
 //     #[ensures(match result {
