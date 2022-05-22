@@ -106,9 +106,9 @@ extern_spec! {
 extern_spec! {
     #[ensures(match result {
         Some(t) =>
-            (@^self_) === (@*self_).subsequence(0, (@*self_).len() - 1) &&
-            (@self_) === (@^self_).push(t),
-        None => (@self_).len() === (@^self_).len() && (@*self_).len() === 0
+            (@^self_) == (@*self_).subsequence(0, (@*self_).len() - 1) &&
+            (@self_) == (@^self_).push(t),
+        None => (@self_).len() == (@^self_).len() && (@*self_).len() == 0
     })]
     fn std::vec::Vec::pop<T, A : Allocator>(self_ : &mut Vec<T, A>) -> Option<T>
 }
