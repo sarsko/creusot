@@ -103,22 +103,14 @@ extern_spec! {
     fn std::vec::Vec::push<T, A : Allocator>(self_: &mut Vec<T, A>, v: T)
 }
 
-mod wtf {
-    use creusot_contracts_proc::*;
-    use crate as creusot_contracts;
-    use std::alloc::Allocator;
-    use crate::logic::*;
-    use crate::{Int, Model, Seq};
-
-    extern_spec! {
-        #[ensures(match result {
-            Some(t) =>
-                (@^self_) === (@*self_).subsequence(0, (@*self_).len() - 1) &&
-                (@self_) === (@^self_).push(t),
-            None => (@self_).len() === (@^self_).len() && (@*self_).len() === 0
-        })]
-        fn std::vec::Vec::pop<T, A : Allocator>(self_ : &mut Vec<T, A>) -> Option<T>
-    }
+extern_spec! {
+    #[ensures(match result {
+        Some(t) =>
+            (@^self_) === (@*self_).subsequence(0, (@*self_).len() - 1) &&
+            (@self_) === (@^self_).push(t),
+        None => (@self_).len() === (@^self_).len() && (@*self_).len() === 0
+    })]
+    fn std::vec::Vec::pop<T, A : Allocator>(self_ : &mut Vec<T, A>) -> Option<T>
 }
 
 extern_spec! {
