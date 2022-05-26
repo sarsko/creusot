@@ -148,6 +148,3 @@ pub mod logic {
 
 #[cfg(feature = "contracts")]
 pub use logic::*;
-
-// Re-export the rand crate
-pub use rand;

@@ -8,7 +8,9 @@ mir_dump/
 
 # Why3 Files
 /*.mlcfg
-why3session*
-why3shapes*
 *.bak
 *~
+
+# macOS
+
+.DS_Store
